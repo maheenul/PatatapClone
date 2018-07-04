@@ -10,5 +10,3 @@ The dependencies of this project include [j-Query](https://jquery.com/), [PaperJ
 
 Running the index.html will execute the project. Ensure the assets folder is placed  in the same directory.
 
-Click [here](index.html) to run the application in your browser.
-
