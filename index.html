@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8">
+        <title>PaperJS Exercise</title>
+        <link rel="stylesheet" href="assets/css/patatap.css">
+       
+        <!-- Load the Paper.js library -->
+        <script type="text/javascript" src="assets/js/lib/paper-full.min.js"></script>
+        <script type="text/javascript" src="assets/js/lib/howler.min.js"></script>
+        <!-- Define inlined PaperScript associate it with myCanvas -->
+        <script type="text/paperscript" canvas="myCanvas">
+            var colors = [];
+            var randomCircle;
+            var randomCircles = [];
+            var sounds=[];
+            var soundNames = ['bubbles.mp3','clay.mp3','confetti.mp3','corona.mp3','dotted-spiral.mp3','flash-1.mp3','flash-2.mp3','flash-3.mp3','glimmer.mp3','moon.mp3','pinwheel.mp3','piston-1.mp3','piston-2.mp3','piston-3.mp3','prism-1.mp3','prism-2.mp3','prism-3.mp3','splits.mp3','squiggle.mp3','strike.mp3','suspension.mp3','timer.mp3','ufo.mp3','veil.mp3','wipe.mp3','zig-zag.mp3'];
+            var stackLimit = 10;
+            var initialRadius=200;
+
+            colorCreator();
+            soundCreator();
+            
+            // Event on key down
+            function onKeyDown(event){
+                var keyASCII = event.key.charCodeAt();
+                if ((keyASCII >= 97)&(keyASCII <= soundNames.length + 97)){
+                    maxPoint = new Point(view.viewSize.width,view.viewSize.height);
+                    randomCircle = new Path.Circle(maxPoint*Point.random(),initialRadius);
+                    randomCircle.fillColor= colors[keyASCII - 97];
+
+                    if (randomCircles.length < stackLimit){
+                        // Populating circles
+                        randomCircles.push(randomCircle);
+                        sounds[keyASCII-97].play();
+
+                    }else{
+                        // Stack control
+                        var removedCircle = randomCircles.shift();
+                        removedCircle.fillColor='black';
+                        randomCircles.push(randomCircle);
+                        sounds[keyASCII-97].play();
+                    }
+                         
+                }
+            }
+
+            // On each frame
+            function onFrame(event) {
+                for (i=0;i<randomCircles.length;i++){
+                    randomCircles[i].fillColor.hue += 1;
+                    randomCircles[i].scale(0.9);
+                }
+            }
+
+            function colorCreator(){
+                for (i=0;i<26;i++){
+                    var h = i*15;
+                    colors.push('hsl('+ h + ',70%,50%)');
+                }
+            }
+
+            function soundCreator(){
+                for (i=0;i<soundNames.length;i++){
+                    var sound = new Howl({
+                        src: ['assets/sounds/'+soundNames[i]]
+                    });
+                    sounds.push(sound);
+                }
+            }
+            
+
+        </script>
+        
+    </head>
+
+	<body>
+
+        <canvas id="myCanvas" resize></canvas>
+
+        <script type="text/javascript" src="assets/js/lib/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="assets/js/patatap.js"></script>
+
+    </body>
+</html>
